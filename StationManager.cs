@@ -17,15 +17,24 @@ public class StationManager : UdonSharpBehaviour
     - Entry/Exit events
     - Current player in station
     */
+
     [UdonSynced] Vector3 syncedPlayerPosition;
 
-    [SerializeField] float headXOffset = 0.25f;
+    [SerializeField] KeyCode desktopMoveUpControl = KeyCode.PageUp;
+    [SerializeField] KeyCode desktopMoveDownControl = KeyCode.PageDown;
+    [SerializeField] KeyCode desktopMoveForwardControl = KeyCode.Home;
+    [SerializeField] KeyCode desktopMoveBackwardControl = KeyCode.End;
+    [SerializeField] KeyCode desktopMoveLeftControl = KeyCode.Insert;
+    [SerializeField] KeyCode desktopMoveRightControl = KeyCode.Delete;
+    [SerializeField] float desktopHeadXOffset = 0.25f;
+
+    [SerializeField] UdonSharpBehaviour[] entryAndExitInformants;
+    
     public VRCStation LinkedStation { get; private set; }
     public VRCPlayerApi SeatedPlayer { get; private set; }
     public bool LocalPlayerInStation { get; private set; } = false;
     Collider linkedCollider;
 
-    [SerializeField] UdonSharpBehaviour[] entryAndExitInformants;
 
     float transitionSpeed = 0.2f;
 
@@ -87,11 +96,11 @@ public class StationManager : UdonSharpBehaviour
         float xOffset = 0;
         if (headHeading > 45 && headHeading < 180)
         {
-            xOffset = Remap(iMin: 45, iMax: 90, oMin: 0, oMax: headXOffset, iValue: headHeading);
+            xOffset = Remap(iMin: 45, iMax: 90, oMin: 0, oMax: desktopHeadXOffset, iValue: headHeading);
         }
         else if (headHeading < 315 && headHeading > 180)
         {
-            xOffset = -Remap(iMin: 315, iMax: 270, oMin: 0, oMax: headXOffset, iValue: headHeading);
+            xOffset = -Remap(iMin: 315, iMax: 270, oMin: 0, oMax: desktopHeadXOffset, iValue: headHeading);
         }
 
         //Destktop movement stuff
@@ -99,37 +108,37 @@ public class StationManager : UdonSharpBehaviour
         {
             bool sync = false;
 
-            if (Input.GetKey(KeyCode.PageUp))
+            if (Input.GetKey(desktopMoveUpControl))
             {
                 preferredStationPosition += Time.deltaTime * transitionSpeed * Vector3.up;
                 sync = true;
             }
 
-            if (Input.GetKey(KeyCode.PageDown))
+            if (Input.GetKey(desktopMoveDownControl))
             {
                 preferredStationPosition += Time.deltaTime * transitionSpeed * Vector3.down;
                 sync = true;
             }
 
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(desktopMoveForwardControl))
             {
                 preferredStationPosition += Time.deltaTime * transitionSpeed * Vector3.forward;
                 sync = true;
             }
 
-            if (Input.GetKey(KeyCode.DownArrow))
+            if (Input.GetKey(desktopMoveBackwardControl))
             {
                 preferredStationPosition += Time.deltaTime * transitionSpeed * Vector3.back;
                 sync = true;
             }
 
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (Input.GetKey(desktopMoveLeftControl))
             {
                 preferredStationPosition += Time.deltaTime * transitionSpeed * Vector3.left;
                 sync = true;
             }
 
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(desktopMoveRightControl))
             {
                 preferredStationPosition += Time.deltaTime * transitionSpeed * Vector3.right;
                 sync = true;
@@ -277,7 +286,7 @@ public class StationManager : UdonSharpBehaviour
         {
             ResetStationPosition();
 
-            InformOfLocalExit();
+            InformOfRemoteExit();
         }
     }
 }
