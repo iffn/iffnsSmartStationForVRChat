@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c333ccfdd0cbdbc4ca30cef2dd6e6b9b, type: 3}
   m_Name: StationManager
   m_EditorClassIdentifier: 
-  serializedUdonProgramAsset: {fileID: 11400000, guid: bf877a01a65f7cf4bba9977d3fe884a9,
+  serializedUdonProgramAsset: {fileID: 11400000, guid: 54d8246ac92bdc244a60085dfb55391f,
     type: 2}
   udonAssembly: 
   assemblyError: 
-  sourceCsScript: {fileID: 11500000, guid: 7416a4ad266f74d4db7c6909853b6b77, type: 3}
+  sourceCsScript: {fileID: 11500000, guid: 5d0a24ac33b44894195da596b9723e9a, type: 3}
   scriptVersion: 2
   compiledVersion: 2
   behaviourSyncMode: 4

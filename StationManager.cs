@@ -29,7 +29,7 @@ public class StationManager : UdonSharpBehaviour
     [SerializeField] float desktopHeadXOffset = 0.25f;
 
     [SerializeField] UdonSharpBehaviour[] entryAndExitInformants;
-    
+
     public VRCStation LinkedStation { get; private set; }
     public VRCPlayerApi SeatedPlayer { get; private set; }
     public bool LocalPlayerInStation { get; private set; } = false;
@@ -159,7 +159,7 @@ public class StationManager : UdonSharpBehaviour
 
     public override void OnOwnershipTransferred(VRCPlayerApi player)
     {
-        if(player.isLocal)
+        if (player.isLocal)
         {
             isOwner = true;
 
@@ -229,7 +229,7 @@ public class StationManager : UdonSharpBehaviour
     public override void OnStationEntered(VRCPlayerApi player)
     {
         //Check for double occupation
-        if(SeatedPlayer != null)
+        if (SeatedPlayer != null)
         {
             //Kick the player out if they have a higher ID than the new player
             if (SeatedPlayer.playerId > player.playerId)
