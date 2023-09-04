@@ -42,7 +42,7 @@ public class StationManager : UdonSharpBehaviour
 
     Transform playerMover;
 
-    public Vector3 preferredStationPosition = 0.6f * Vector3.down;
+    Vector3 preferredStationPosition = Vector3.zero;
 
     void ResetStationPosition()
     {
