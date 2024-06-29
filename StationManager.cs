@@ -44,11 +44,50 @@ public class StationManager : UdonSharpBehaviour
 
     Vector3 preferredStationPosition = Vector3.zero;
 
+    //Internal functions
     void ResetStationPosition()
     {
         playerMover.localPosition = preferredStationPosition;
     }
 
+    void InteractCalled()
+    {
+        LinkedStation.UseStation(Networking.LocalPlayer);
+    }
+
+    void InformOfLocalEntry()
+    {
+        foreach (UdonSharpBehaviour behavior in entryAndExitInformants)
+        {
+            behavior.SendCustomEvent("LocalPlayerEntered");
+        }
+    }
+
+    void InformOfLocalExit()
+    {
+        foreach (UdonSharpBehaviour behavior in entryAndExitInformants)
+        {
+            behavior.SendCustomEvent("LocalPlayerExited");
+        }
+    }
+
+    void InformOfRemoteEntry()
+    {
+        foreach (UdonSharpBehaviour behavior in entryAndExitInformants)
+        {
+            behavior.SendCustomEvent("RemotePlayerEntered");
+        }
+    }
+
+    void InformOfRemoteExit()
+    {
+        foreach (UdonSharpBehaviour behavior in entryAndExitInformants)
+        {
+            behavior.SendCustomEvent("RemotePlayerExited");
+        }
+    }
+
+    //Unity functions:
     private void Start()
     {
         LinkedStation = (VRCStation)GetComponent(typeof(VRCStation));
@@ -60,17 +99,6 @@ public class StationManager : UdonSharpBehaviour
         isOwner = Networking.LocalPlayer.IsOwner(gameObject);
 
         linkedCollider = transform.GetComponent<Collider>();
-    }
-
-    public override void Interact()
-    {
-        LinkedStation.UseStation(Networking.LocalPlayer);
-    }
-
-    public float Remap(float iMin, float iMax, float oMin, float oMax, float iValue)
-    {
-        float t = Mathf.InverseLerp(iMin, iMax, iValue);
-        return Mathf.Lerp(oMin, oMax, t);
     }
 
     private void Update()
@@ -157,6 +185,24 @@ public class StationManager : UdonSharpBehaviour
         }
     }
 
+    //Externally callable functions:
+    public void CallableInteract()
+    {
+        InteractCalled();
+    }
+
+    public float Remap(float iMin, float iMax, float oMin, float oMax, float iValue)
+    {
+        float t = Mathf.InverseLerp(iMin, iMax, iValue);
+        return Mathf.Lerp(oMin, oMax, t);
+    }
+
+    //VRChat funcitons:
+    public override void Interact()
+    {
+        InteractCalled();
+    }
+
     public override void OnOwnershipTransferred(VRCPlayerApi player)
     {
         if (player.isLocal)
@@ -191,38 +237,6 @@ public class StationManager : UdonSharpBehaviour
         if (value && LocalPlayerInStation && LinkedStation.disableStationExit)
         {
             LinkedStation.ExitStation(Networking.LocalPlayer);
-        }
-    }
-
-    void InformOfLocalEntry()
-    {
-        foreach (UdonSharpBehaviour behavior in entryAndExitInformants)
-        {
-            behavior.SendCustomEvent("LocalPlayerEntered");
-        }
-    }
-
-    void InformOfLocalExit()
-    {
-        foreach (UdonSharpBehaviour behavior in entryAndExitInformants)
-        {
-            behavior.SendCustomEvent("LocalPlayerExited");
-        }
-    }
-
-    void InformOfRemoteEntry()
-    {
-        foreach (UdonSharpBehaviour behavior in entryAndExitInformants)
-        {
-            behavior.SendCustomEvent("RemotePlayerEntered");
-        }
-    }
-
-    void InformOfRemoteExit()
-    {
-        foreach (UdonSharpBehaviour behavior in entryAndExitInformants)
-        {
-            behavior.SendCustomEvent("RemotePlayerExited");
         }
     }
 
